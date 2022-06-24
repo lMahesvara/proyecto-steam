@@ -9,14 +9,14 @@ import dominio.Videojuego;
 import excepciones.PersistenciaException;
 import interfaces.IConexionBD;
 import interfaces.IVideojuegosDAO;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
-/**
- *
- * @author Erick
- */
+
 public class VideojuegosDAO implements IVideojuegosDAO{
 
     private final IConexionBD conexionBD;
@@ -47,7 +47,7 @@ public class VideojuegosDAO implements IVideojuegosDAO{
             return videojuego;
         } catch (Exception ex) {
             Logger.getLogger(VideojuegosDAO.class.getName()).log(Level.SEVERE, null, ex);
-            throw new PersistenciaException("No se encontró el videojuego");
+            throw new PersistenciaException("No fue posible consultar el videojuego");
         }
     }
 
@@ -64,8 +64,10 @@ public class VideojuegosDAO implements IVideojuegosDAO{
             videojuegoGuardado.setDesarrolladora(videojuego.getDesarrolladora());
             videojuegoGuardado.setStock(videojuego.getStock());
             videojuegoGuardado.setPrecio(videojuego.getPrecio());
-            for(DetalleCompra compra: videojuego.getCompras()){
-                videojuegoGuardado.addCompra(compra);
+            if(videojuego.getCompras() != null){
+                for(DetalleCompra compra: videojuego.getCompras()){
+                    videojuegoGuardado.addCompra(compra);
+                }
             }
             em.persist(videojuegoGuardado);
             em.getTransaction().commit();
@@ -78,11 +80,11 @@ public class VideojuegosDAO implements IVideojuegosDAO{
     }
 
     @Override
-    public void eliminar(Videojuego videojuego) throws PersistenciaException {
+    public void eliminar(Long id) throws PersistenciaException {
         try {
             EntityManager em = this.conexionBD.crearConexion();
             em.getTransaction().begin();
-            Videojuego videojuegoGuardado = em.find(Videojuego.class, videojuego.getId());
+            Videojuego videojuegoGuardado = em.find(Videojuego.class, id);
             if(videojuegoGuardado == null){
                 throw new PersistenciaException("No se encontró el videojuego a eliminar");
             }
@@ -92,6 +94,41 @@ public class VideojuegosDAO implements IVideojuegosDAO{
             Logger.getLogger(VideojuegosDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new PersistenciaException("No fue posible eliminar el videojuego");
         }
+    }
+
+    @Override
+    public List<Videojuego> consultarTodos() throws PersistenciaException {
+        List<Videojuego> videojuegos = new LinkedList<>();
+        try {
+            EntityManager em = this.conexionBD.crearConexion();
+            Query query = em.createQuery("SELECT v FROM Videojuego v");
+            videojuegos = (List<Videojuego>)query.getResultList();
+        } catch (Exception ex) {
+            Logger.getLogger(VideojuegosDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new PersistenciaException("No fue posible consultar los videojuegos");
+        }
+        return videojuegos;
+    }
+
+    @Override
+    public Videojuego consultar(String nombre) throws PersistenciaException {
+        List<Videojuego> videojuegos = new LinkedList<>();
+        Videojuego videojuego = null;
+        try {
+            EntityManager em = this.conexionBD.crearConexion();
+            Query query = em.createQuery("SELECT v FROM Videojuego v WHERE v.nombre = :nombre");
+            query.setParameter("nombre", nombre);
+            videojuegos = (List<Videojuego>)query.getResultList();
+            if(!videojuegos.isEmpty()){
+                System.out.println(videojuegos);
+                videojuego = videojuegos.get(0);
+            }
+                
+        } catch (Exception ex) {
+            Logger.getLogger(VideojuegosDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new PersistenciaException("No fue posible consultar el videojuegos");
+        }
+        return videojuego;
     }
     
 }

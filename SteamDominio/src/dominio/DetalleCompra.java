@@ -34,8 +34,7 @@ public class DetalleCompra implements Serializable {
     @JoinColumn(name = "id_videojuego", nullable = false)
     private Videojuego videojuego;
     
-    @ManyToOne(cascade = CascadeType.ALL)
-    @CascadeOnDelete
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_compra", nullable = false)
     private Compra compra;
 

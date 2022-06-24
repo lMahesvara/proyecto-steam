@@ -37,7 +37,7 @@ public class Compra implements Serializable {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "compra")
     private List<DetalleCompra> videojuegos;
 
     public Compra() {
