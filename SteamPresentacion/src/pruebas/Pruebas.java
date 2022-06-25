@@ -1,9 +1,6 @@
 package pruebas;
 
-import dominio.Compra;
-import dominio.DetalleCompra;
-import dominio.Usuario;
-import dominio.Videojuego;
+import guis.RegistroComprasFrame;
 import implementaciones.ComprasDAO;
 import implementaciones.ConexionBD;
 import implementaciones.UsuariosDAO;
@@ -12,7 +9,11 @@ import interfaces.IComprasDAO;
 import interfaces.IConexionBD;
 import interfaces.IUsuariosDAO;
 import interfaces.IVideojuegosDAO;
-import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 public class Pruebas {
 
@@ -21,6 +22,13 @@ public class Pruebas {
         IUsuariosDAO usuariosDAO = new UsuariosDAO(conexionBD);
         IVideojuegosDAO videojuegosDAO = new VideojuegosDAO(conexionBD);
         IComprasDAO comprasDAO = new ComprasDAO(conexionBD);
+        try {
+            UIManager.setLookAndFeel(new NimbusLookAndFeel());
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Pruebas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        new RegistroComprasFrame(videojuegosDAO,usuariosDAO, comprasDAO).setVisible(true);
+        //new VideojuegosFrame(videojuegosDAO).setVisible(true);
         try {
             
 //            Usuario usuario = usuariosDAO.consultar(4L);
@@ -34,7 +42,7 @@ public class Pruebas {
 //            Videojuego videojuego = videojuegosDAO.consultar(4L);
 //            videojuegosDAO.eliminar(videojuego);
             
-//            Videojuego videojuego = videojuegosDAO.consultar(1L);
+//            Videojuego videojuego = videojuegosDAO.consultar(6L);
 //            System.out.println(videojuego);
 //            videojuego.getCompras().forEach(compra -> {
 //                System.out.println(compra);
@@ -50,6 +58,7 @@ public class Pruebas {
 //            Usuario usuario = usuariosDAO.consultar(1L);
 //            //Videojuego videojuego = videojuegosDAO.consultar(1L);
 //            Videojuego videojuego2 = videojuegosDAO.consultar(5L);
+//            
 //            Compra compra = new Compra(new GregorianCalendar(), 500, usuario);
 //            DetalleCompra dc1 = new DetalleCompra(2, 100, 200, videojuego2, compra);
 //            //DetalleCompra dc2 = new DetalleCompra(1, 300, 300, videojuego, compra);

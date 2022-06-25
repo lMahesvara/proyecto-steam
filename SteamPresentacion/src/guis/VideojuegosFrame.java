@@ -23,7 +23,7 @@ public class VideojuegosFrame extends javax.swing.JFrame {
     
     private void generarTablaVideojuegos(){
         try {
-            List<Videojuego> videojuegos = videojuegosDAO.consultarTodos();
+            List<Videojuego> videojuegos = videojuegosDAO.consultarTodos("");
             DefaultTableModel modelo = (DefaultTableModel)this.tblVideojuegos.getModel();
             modelo.setRowCount(0);
             

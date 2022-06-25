@@ -97,11 +97,16 @@ public class VideojuegosDAO implements IVideojuegosDAO{
     }
 
     @Override
-    public List<Videojuego> consultarTodos() throws PersistenciaException {
+    public List<Videojuego> consultarTodos(String nombre) throws PersistenciaException {
         List<Videojuego> videojuegos = new LinkedList<>();
         try {
             EntityManager em = this.conexionBD.crearConexion();
-            Query query = em.createQuery("SELECT v FROM Videojuego v");
+            if(nombre == null || nombre.isEmpty()){
+                Query query = em.createQuery("SELECT v FROM Videojuego v");
+                return (List<Videojuego>)query.getResultList();
+            }
+            Query query = em.createQuery("SELECT v FROM Videojuego v WHERE v.nombre LIKE :nombre");
+            query.setParameter("nombre", "%"+nombre+"%");
             videojuegos = (List<Videojuego>)query.getResultList();
         } catch (Exception ex) {
             Logger.getLogger(VideojuegosDAO.class.getName()).log(Level.SEVERE, null, ex);

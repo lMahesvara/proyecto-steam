@@ -41,6 +41,15 @@ public class DetalleCompra implements Serializable {
     public DetalleCompra() {
     }
 
+    public DetalleCompra(int numeroCopias, float precio, float importe, Videojuego videojuego) {
+        this.numeroCopias = numeroCopias;
+        this.precio = precio;
+        this.importe = importe;
+        this.videojuego = videojuego;
+    }
+    
+    
+
     public DetalleCompra(int numeroCopias, float precio, float importe, Videojuego videojuego, Compra compra) {
         this.numeroCopias = numeroCopias;
         this.precio = precio;

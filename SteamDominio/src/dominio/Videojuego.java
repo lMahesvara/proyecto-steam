@@ -137,7 +137,7 @@ public class Videojuego implements Serializable {
 
     @Override
     public String toString() {
-        return "Videojuego{" + "id=" + id + ", nombre=" + nombre + ", desarrolladora=" + desarrolladora + ", stock=" + stock + ", precio=" + precio + '}';
+        return nombre;
     }
 
     
