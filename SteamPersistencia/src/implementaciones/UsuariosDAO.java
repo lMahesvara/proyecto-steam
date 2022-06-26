@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package implementaciones;
 
 import dominio.Compra;
@@ -9,9 +5,14 @@ import dominio.Usuario;
 import excepciones.PersistenciaException;
 import interfaces.IConexionBD;
 import interfaces.IUsuariosDAO;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 public class UsuariosDAO implements IUsuariosDAO{
 
@@ -49,38 +50,68 @@ public class UsuariosDAO implements IUsuariosDAO{
     @Override
     public void actualizar(Usuario usuario) throws PersistenciaException {
         try {
-            EntityManager em = this.conexionBD.crearConexion();
-            em.getTransaction().begin();
-            Usuario usuarioGuardado = em.find(Usuario.class, usuario.getId());
+            EntityManager entityManager = this.conexionBD.crearConexion();
+            entityManager.getTransaction().begin();
+            Usuario usuarioGuardado = entityManager.find(Usuario.class, usuario.getId());
             if(usuarioGuardado == null){
                 throw new PersistenciaException("No se encontró el usuario a actualizar");
             }
             usuarioGuardado.setNombre(usuario.getNombre());
             usuarioGuardado.setTelefono(usuario.getTelefono());
-            for(Compra compra: usuario.getCompras()){
+            if(usuario.getCompras() != null){
+                for(Compra compra: usuario.getCompras()){
                 usuarioGuardado.addCompra(compra);
+                }
             }
-            em.persist(usuarioGuardado);
-            em.getTransaction().commit();
+            
+            entityManager.persist(usuarioGuardado);
+            entityManager.getTransaction().commit();
         } catch(PersistenciaException ex){
             throw ex;
         } catch (Exception ex) {
-            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
-            throw new PersistenciaException("No fue posible actualizar el usuario");
+            Logger.getLogger(VideojuegosDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new PersistenciaException("No fue posible actualizar el videojuego");
         }
     }
 
     @Override
-    public void eliminar(Usuario usuario) throws PersistenciaException {
+    public void eliminar(Long id) throws PersistenciaException {
         try {
-            EntityManager em = this.conexionBD.crearConexion();
-            em.getTransaction().begin();
-            Usuario usuarioGuardado = em.find(Usuario.class, usuario.getId());
+            EntityManager entityManager = this.conexionBD.crearConexion();
+            entityManager.getTransaction().begin();
+            Usuario usuarioGuardado = entityManager.find(Usuario.class, id);
             if(usuarioGuardado == null){
                 throw new PersistenciaException("No se encontró el usuario a eliminar");
             }
-            em.remove(usuarioGuardado);
-            em.getTransaction().commit();
+            if(usuarioGuardado.getCompras() != null){
+                throw new PersistenciaException("No se puede eliminar un usuario que ya realizó una compra");
+            }
+            entityManager.remove(usuarioGuardado);
+            entityManager.getTransaction().commit();
+        }catch(PersistenciaException e){
+            throw e;
+        }
+        catch (Exception ex) {
+            Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new PersistenciaException("No fue posible eliminar el usuario");
+        }
+    }
+
+    @Override
+    public List<Usuario> consultarTodos() throws PersistenciaException {
+        try {
+            EntityManager entityManager = this.conexionBD.crearConexion();
+            CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Usuario> criteria = builder.createQuery(Usuario.class);
+            Root<Usuario> root = criteria.from(Usuario.class);
+            
+            CriteriaQuery<Usuario> select = criteria.select(root);
+            
+            TypedQuery<Usuario> query = entityManager.createQuery(select);
+            
+            return query.getResultList();
+                   
+                    
         } catch (Exception ex) {
             Logger.getLogger(UsuariosDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new PersistenciaException("No fue posible eliminar el usuario");

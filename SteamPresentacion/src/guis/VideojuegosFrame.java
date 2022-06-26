@@ -4,7 +4,9 @@ import dominio.Videojuego;
 import excepciones.PersistenciaException;
 import interfaces.IVideojuegosDAO;
 import java.awt.event.KeyEvent;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -25,6 +27,7 @@ public class VideojuegosFrame extends javax.swing.JFrame {
         try {
             List<Videojuego> videojuegos = videojuegosDAO.consultarTodos("");
             DefaultTableModel modelo = (DefaultTableModel)this.tblVideojuegos.getModel();
+            NumberFormat formatoImporte = NumberFormat.getCurrencyInstance(new Locale("es", "MX"));
             modelo.setRowCount(0);
             
             videojuegos.forEach(vj -> {
@@ -33,7 +36,7 @@ public class VideojuegosFrame extends javax.swing.JFrame {
                     vj.getNombre(),
                     vj.getDesarrolladora(),
                     vj.getStock(),
-                    vj.getPrecio()
+                    formatoImporte.format(vj.getPrecio())
                 };
                 modelo.addRow(fila);
             });
@@ -350,7 +353,7 @@ public class VideojuegosFrame extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class
+                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -374,6 +377,11 @@ public class VideojuegosFrame extends javax.swing.JFrame {
 
         btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnEliminar.setText("Eliminar");
@@ -477,6 +485,7 @@ public class VideojuegosFrame extends javax.swing.JFrame {
         String regExp = "[0-9]+([.][0-9]{1,2})?";
         if(!txtPrecio.getText().matches(regExp)){
             JOptionPane.showMessageDialog(this,"El precio NO cumple con el formato","Error", JOptionPane.ERROR_MESSAGE);
+            txtPrecio.requestFocus();
         }
     }//GEN-LAST:event_txtPrecioFocusLost
 
@@ -508,6 +517,11 @@ public class VideojuegosFrame extends javax.swing.JFrame {
             Logger.getLogger(VideojuegosFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_txtNombreFocusLost
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        new MenuFrame().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

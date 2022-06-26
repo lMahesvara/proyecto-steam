@@ -9,6 +9,7 @@ import excepciones.PersistenciaException;
 import interfaces.IComprasDAO;
 import interfaces.IUsuariosDAO;
 import interfaces.IVideojuegosDAO;
+import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -114,7 +115,7 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
                 modelo.addRow(fila);
             });
         } catch (PersistenciaException ex) {
-            Logger.getLogger(VideojuegosFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegistroComprasFrame.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -144,7 +145,8 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
         }
         Usuario usuario = (Usuario) cbxUsuario.getSelectedItem();
         float total = generarCostos();
-        Compra compra = new Compra(Calendar.getInstance(), total, usuario);
+        Calendar fecha = Calendar.getInstance();
+        Compra compra = new Compra(fecha, total, usuario);
 
         for (int i = 0; i < tblDetallesCompra.getRowCount(); i++) {
             DetalleCompra dc = new DetalleCompra();
@@ -226,7 +228,7 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
         txtTotal.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
 
         cbxUsuario.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        cbxUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione el usuario" }));
+        cbxUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un usuario" }));
         cbxUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxUsuarioActionPerformed(evt);
@@ -269,13 +271,13 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
                             .addComponent(lblSubtotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(27, 27, 27)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSubtotal)
+                            .addComponent(txtTotal)
+                            .addComponent(cbxUsuario, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(21, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(58, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(58, 58, 58))
         );
@@ -314,7 +316,7 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class
+                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -332,6 +334,11 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
         tblVideojuegos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblVideojuegosMouseClicked(evt);
+            }
+        });
+        tblVideojuegos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblVideojuegosKeyPressed(evt);
             }
         });
         panTablaVideojuegos.setViewportView(tblVideojuegos);
@@ -450,7 +457,7 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -472,14 +479,14 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -491,11 +498,7 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxUsuarioActionPerformed
 
-    private void tblVideojuegosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVideojuegosMouseClicked
-        if (evt.getClickCount() == 2 && !evt.isConsumed()) {
-
-        }
-
+    private void detallesVideojuego(){
         int cantidad = 1;
         StringBuffer cantidadElegida = new StringBuffer();
         int indiceColumnaId = 0;
@@ -518,10 +521,12 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
             agregarVideojuegoSeleccionado(videojuego, cantidad);
             generarCostos();
         } catch (PersistenciaException ex) {
-            Logger.getLogger(VideojuegosFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegistroComprasFrame.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
+    }
+    private void tblVideojuegosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVideojuegosMouseClicked
+        detallesVideojuego();
     }//GEN-LAST:event_tblVideojuegosMouseClicked
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -553,8 +558,15 @@ public class RegistroComprasFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_tblDetallesCompraMouseClicked
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        //TODO: Hacer que devuelva al menú
+        new MenuFrame().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void tblVideojuegosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVideojuegosKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            detallesVideojuego();
+        }
+    }//GEN-LAST:event_tblVideojuegosKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

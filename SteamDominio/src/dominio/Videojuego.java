@@ -33,7 +33,7 @@ public class Videojuego implements Serializable {
     @Column(name = "precio", nullable = false)
     private float precio;
     
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "videojuego")
+    @OneToMany(cascade = {CascadeType.MERGE}, mappedBy = "videojuego")
     private List<DetalleCompra> compras;
 
     public Videojuego() {

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package implementaciones;
 
 import dominio.DetalleCompra;
@@ -88,8 +84,12 @@ public class VideojuegosDAO implements IVideojuegosDAO{
             if(videojuegoGuardado == null){
                 throw new PersistenciaException("No se encontró el videojuego a eliminar");
             }
+            if(videojuegoGuardado.getCompras() != null && !videojuegoGuardado.getCompras().isEmpty())
+                throw new PersistenciaException("No se puede eliminar un videojuego que ha sido vendido");
             em.remove(videojuegoGuardado);
             em.getTransaction().commit();
+        }catch(PersistenciaException e){
+            throw e;
         } catch (Exception ex) {
             Logger.getLogger(VideojuegosDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new PersistenciaException("No fue posible eliminar el videojuego");
