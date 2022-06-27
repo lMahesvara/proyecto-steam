@@ -83,7 +83,7 @@ public class UsuariosDAO implements IUsuariosDAO{
             if(usuarioGuardado == null){
                 throw new PersistenciaException("No se encontró el usuario a eliminar");
             }
-            if(usuarioGuardado.getCompras() != null){
+            if(usuarioGuardado.getCompras() != null && !usuarioGuardado.getCompras().isEmpty()){
                 throw new PersistenciaException("No se puede eliminar un usuario que ya realizó una compra");
             }
             entityManager.remove(usuarioGuardado);

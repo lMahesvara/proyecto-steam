@@ -58,7 +58,7 @@ public class UsuariosForm extends javax.swing.JFrame {
         
         try{
             Usuario usuario = usuariosDAO.consultar(idUsuario);
-            this.txtUsuario.setText(usuario.getId().toString());
+            this.txtIdUsuario.setText(usuario.getId().toString());
             this.txtNombre.setText(usuario.getNombre());
             this.txtTelefono.setText(usuario.getTelefono());
             this.btnGuardar.setText("Actualizar");
@@ -71,7 +71,7 @@ public class UsuariosForm extends javax.swing.JFrame {
     }
     
     private void limpiarCampos(){
-        this.txtUsuario.setText("");
+        this.txtIdUsuario.setText("");
         this.txtNombre.setText("");
         this.txtTelefono.setText("");
         this.btnGuardar.setText("Agregar");
@@ -138,7 +138,7 @@ public class UsuariosForm extends javax.swing.JFrame {
     }
     
     private void actualizar(){
-        Long idUsuario = Long.parseLong(this.txtUsuario.getText());
+        Long idUsuario = Long.parseLong(this.txtIdUsuario.getText());
         String nombre = this.txtNombre.getText();
         String  telefono = this.txtTelefono.getText();
         Usuario usuario = new Usuario(idUsuario,nombre, telefono);
@@ -172,7 +172,7 @@ public class UsuariosForm extends javax.swing.JFrame {
         lblUsuario = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
         lblTelefono = new javax.swing.JLabel();
-        txtUsuario = new javax.swing.JTextField();
+        txtIdUsuario = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
         btnGuardar = new javax.swing.JButton();
@@ -195,12 +195,17 @@ public class UsuariosForm extends javax.swing.JFrame {
         lblTelefono.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         lblTelefono.setText("Teléfono");
 
-        txtUsuario.setEditable(false);
-        txtUsuario.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txtIdUsuario.setEditable(false);
+        txtIdUsuario.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
 
         txtNombre.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
 
         txtTelefono.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
 
         btnGuardar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnGuardar.setText("Agregar");
@@ -286,7 +291,7 @@ public class UsuariosForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                             .addComponent(txtTelefono)
-                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(42, 42, 42)
                         .addComponent(btnGuardar)
@@ -306,7 +311,7 @@ public class UsuariosForm extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsuario)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombre)
@@ -364,6 +369,13 @@ public class UsuariosForm extends javax.swing.JFrame {
         verDetalles();
     }//GEN-LAST:event_tblUsuariosMouseClicked
 
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        char c = evt.getKeyChar();
+        if(!Character.isDigit(c) || txtTelefono.getText().length() >=10){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
+
     /**
      * 
      * @param args 
@@ -380,9 +392,9 @@ public class UsuariosForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JScrollPane panTablaUsuarios;
     private javax.swing.JTable tblUsuarios;
+    private javax.swing.JTextField txtIdUsuario;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtTelefono;
-    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 
     
